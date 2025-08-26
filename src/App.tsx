@@ -59,6 +59,19 @@ function App() {
     initAddTaskForm();
   };
 
+  function finishSelectedTasks() {
+    const newTasks = tasks.filter(task => {
+      if (selectedTasks.has(task.id)) {
+        return false;
+      } else {
+        return true;
+      }
+    })
+
+    setTasks(newTasks);
+    setSelectedTasks(new Set());
+  }
+
   let filteredTasks: Task[] = [];
 
   const urgentTaskCount = tasks.filter(task => task.priority === "Urgente").length;
@@ -85,11 +98,16 @@ function App() {
           <button className="btn btn-primary" onClick={addTask}>Ajouter</button>
         </div>
         <div className="space-y-2 flex-1 h-fit">
-          <div className="flex flex-wrap gap-4">
-            <button className={`btn btn-soft ${filter === "Tous" ? "btn-primary" : ""}`} onClick={() => setFilter("Tous")}>Tous({tasksCount})</button>
-            <button className={`btn btn-soft ${filter === "Urgente" ? "btn-primary" : ""}`} onClick={() => setFilter("Urgente")}>Urgente({urgentTaskCount})</button>
-            <button className={`btn btn-soft ${filter === "Moyenne" ? "btn-primary" : ""}`} onClick={() => setFilter("Moyenne")}>Moyenne({mediumTaskCount})</button>
-            <button className={`btn btn-soft ${filter === "Basse" ? "btn-primary" : ""}`} onClick={() => setFilter("Basse")}>Basse({lowTaskCount})</button>
+          <div className="flex items-center justify-between">
+            <div className="flex flex-wrap gap-4">
+              <button className={`btn btn-soft ${filter === "Tous" ? "btn-primary" : ""}`} onClick={() => setFilter("Tous")}>Tous({tasksCount})</button>
+              <button className={`btn btn-soft ${filter === "Urgente" ? "btn-primary" : ""}`} onClick={() => setFilter("Urgente")}>Urgente({urgentTaskCount})</button>
+              <button className={`btn btn-soft ${filter === "Moyenne" ? "btn-primary" : ""}`} onClick={() => setFilter("Moyenne")}>Moyenne({mediumTaskCount})</button>
+              <button className={`btn btn-soft ${filter === "Basse" ? "btn-primary" : ""}`} onClick={() => setFilter("Basse")}>Basse({lowTaskCount})</button>
+            </div>
+            <button className="btn btn-primary"
+                    disabled={selectedTasks.size === 0}
+                    onClick={finishSelectedTasks}>Finir la sélection({selectedTasks.size})</button>
           </div>
         </div>
         {filteredTasks.length > 0 ? (
