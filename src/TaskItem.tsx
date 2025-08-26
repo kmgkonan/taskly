@@ -9,10 +9,11 @@ type Task = {
 };
 
 type Props = {
-    task: Task
+    task: Task,
+    onDelete: () => void
 }
 
-const TaskItem = ({task}: Props) => {
+const TaskItem = ({task, onDelete}: Props) => {
     return (
         <li className="p-3">
             <div className="flex justify-between items-center">
@@ -28,7 +29,7 @@ const TaskItem = ({task}: Props) => {
                             {task.priority}
                     </span>
                 </div>
-                <button className="btn btn-error btn-soft">
+                <button onClick={onDelete} className="btn btn-error btn-soft">
                         <Trash className="w-4 h-4"/>
                 </button>
             </div>
