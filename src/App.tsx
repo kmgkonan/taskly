@@ -1,19 +1,58 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import TaskItem from "./TaskItem";
 
-type Priority = "Urgente" | "Moyenne" | "Basse"
+type Priority = "Urgente" | "Moyenne" | "Basse";
 
 type Task = {
   id: number,
   text: string,
   priority: Priority
-}
+};
 
 function App() {
   const [inputTask, setInputTask] = useState<string>("");
   const [selectPriority, setSelectPriority] = useState<Priority>("Moyenne");
 
+  const savedTasks = localStorage.getItem("taks");
+  const initialTasks = savedTasks ? JSON.parse(savedTasks) : [];
+
+  const [tasks, setTasks] = useState<Task[]>(initialTasks);
+  const [filter, setFilter] = useState<Priority | "Tous">("Tous");
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
+   function initAddTaskForm() {
+    setInputTask("");
+    setSelectPriority("Moyenne");
+   }
+
   function addTask() {
-    
+    if (inputTask.trim() == "") {
+      return
+    }
+    const newTask: Task = {
+      id: Date.now(),
+      text: inputTask.trim(),
+      priority: selectPriority
+    };
+    const newTasks = [newTask, ...tasks];
+    setTasks(newTasks);
+    initAddTaskForm();
+  };
+
+  let filteredTasks: Task[] = [];
+
+  const urgentTaskCount = tasks.filter(task => task.priority === "Urgente").length;
+  const mediumTaskCount = tasks.filter(task => task.priority === "Moyenne").length;
+  const lowTaskCount = tasks.filter(task => task.priority === "Basse").length;
+  const tasksCount = tasks.length;
+
+  if(filter == "Tous") {
+    filteredTasks = tasks;
+  } else {
+    filteredTasks = tasks.filter(task => task.priority === filter)
   }
   
   return (
@@ -28,6 +67,25 @@ function App() {
           </select>
           <button className="btn btn-primary" onClick={addTask}>Ajouter</button>
         </div>
+        <div className="space-y-2 flex-1 h-fit">
+          <div className="flex flex-wrap gap-4">
+            <button className={`btn btn-soft ${filter === "Tous" ? "btn-primary" : ""}`} onClick={() => setFilter("Tous")}>Tous({tasksCount})</button>
+            <button className={`btn btn-soft ${filter === "Urgente" ? "btn-primary" : ""}`} onClick={() => setFilter("Urgente")}>Urgente({urgentTaskCount})</button>
+            <button className={`btn btn-soft ${filter === "Moyenne" ? "btn-primary" : ""}`} onClick={() => setFilter("Moyenne")}>Moyenne({mediumTaskCount})</button>
+            <button className={`btn btn-soft ${filter === "Basse" ? "btn-primary" : ""}`} onClick={() => setFilter("Basse")}>Basse({lowTaskCount})</button>
+          </div>
+        </div>
+        {filteredTasks.length > 0 ? (
+          <ul className="divide-y divide-primary/20">
+            {filteredTasks.map(task => (
+              <li key={task.id}>
+                <TaskItem task={task}/>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div>test2</div>
+        )}
       </div>
     </div>
   )
