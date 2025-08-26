@@ -28,6 +28,11 @@ function App() {
     setSelectPriority("Moyenne");
    }
 
+   function deleteTask(id: number) {
+    const newTasks = tasks.filter(task => task.id !== id);
+    setTasks(newTasks);
+   };
+
   function addTask() {
     if (inputTask.trim() == "") {
       return
@@ -79,7 +84,7 @@ function App() {
           <ul className="divide-y divide-primary/20">
             {filteredTasks.map(task => (
               <li key={task.id}>
-                <TaskItem task={task}/>
+                <TaskItem task={task} onDelete={() => deleteTask(task.id)}/>
               </li>
             ))}
           </ul>
