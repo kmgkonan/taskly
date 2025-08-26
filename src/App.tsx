@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import TaskItem from "./TaskItem";
+import { Construction } from "lucide-react";
 
 type Priority = "Urgente" | "Moyenne" | "Basse";
 
@@ -89,7 +90,12 @@ function App() {
             ))}
           </ul>
         ) : (
-          <div>test2</div>
+          <div className="flex justify-center items-center flex-col p-5">
+            <div>
+              <Construction strokeWidth={1} className="w-40 h-40 text-primary"/>
+            </div>
+            <p className="text-sm">Aucune tâche pour ce filtre</p>
+          </div>
         )}
       </div>
     </div>
