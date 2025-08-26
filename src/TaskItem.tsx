@@ -10,15 +10,20 @@ type Task = {
 
 type Props = {
     task: Task,
-    onDelete: () => void
-}
+    onDelete: () => void,
+    isSelected: boolean,
+    onToggleSelect: (id: number) => void
+};
 
-const TaskItem = ({task, onDelete}: Props) => {
+const TaskItem = ({task, onDelete, isSelected, onToggleSelect}: Props) => {
     return (
         <li className="p-3">
             <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
-                    <input type="checkbox" className="checkbox checkbox-primary checkbox-sm"/>
+                    <input type="checkbox"
+                            className="checkbox checkbox-primary checkbox-sm"
+                            checked={isSelected}
+                            onChange={() => onToggleSelect(task.id)}/>
                     <span className="text-md font-bold">
                         <span>{task.text}</span>
                     </span>

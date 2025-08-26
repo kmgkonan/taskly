@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import TaskItem from "./TaskItem";
 import { Construction } from "lucide-react";
 
@@ -19,6 +19,7 @@ function App() {
 
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [filter, setFilter] = useState<Priority | "Tous">("Tous");
+  const [selectedTasks, setSelectedTasks] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -33,6 +34,16 @@ function App() {
     const newTasks = tasks.filter(task => task.id !== id);
     setTasks(newTasks);
    };
+
+   function toggleSelectedTask(id: number) {
+    const newSelectedTasks = new Set(selectedTasks);
+    if (newSelectedTasks.has(id)) {
+      newSelectedTasks.delete(id);
+    } else {
+      newSelectedTasks.add(id);
+    }
+    setSelectedTasks(newSelectedTasks);
+   }
 
   function addTask() {
     if (inputTask.trim() == "") {
@@ -85,7 +96,10 @@ function App() {
           <ul className="divide-y divide-primary/20">
             {filteredTasks.map(task => (
               <li key={task.id}>
-                <TaskItem task={task} onDelete={() => deleteTask(task.id)}/>
+                <TaskItem task={task} 
+                          onDelete={() => deleteTask(task.id)}
+                          isSelected={selectedTasks.has(task.id)}
+                          onToggleSelect={toggleSelectedTask}/>
               </li>
             ))}
           </ul>
