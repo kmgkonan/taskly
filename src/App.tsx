@@ -86,51 +86,56 @@ function App() {
   }
   
   return (
-    <div className="flex justify-center">
-      <div className="w-2/3 flex flex-col gap-4 my-15 bg-base-300 p-5 rounded-2xl">
-        <div className="flex gap-4">
-          <input type="text" className="input w-full" placeholder="Ajouter une tâche" value={inputTask} onChange={(e) => setInputTask(e.target.value)} />
-          <select className="select w-full" value={selectPriority} onChange={(e) => setSelectPriority(e.target.value as Priority)}>
-            <option value="Urgente">Urgente</option>
-            <option value="Moyenne">Moyenne</option>
-            <option value="Basse">Basse</option>
-          </select>
-          <button className="btn btn-primary" onClick={addTask}>Ajouter</button>
-        </div>
-        <div className="space-y-2 flex-1 h-fit">
-          <div className="flex items-center justify-between">
-            <div className="flex flex-wrap gap-4">
-              <button className={`btn btn-soft ${filter === "Tous" ? "btn-primary" : ""}`} onClick={() => setFilter("Tous")}>Tous({tasksCount})</button>
-              <button className={`btn btn-soft ${filter === "Urgente" ? "btn-primary" : ""}`} onClick={() => setFilter("Urgente")}>Urgente({urgentTaskCount})</button>
-              <button className={`btn btn-soft ${filter === "Moyenne" ? "btn-primary" : ""}`} onClick={() => setFilter("Moyenne")}>Moyenne({mediumTaskCount})</button>
-              <button className={`btn btn-soft ${filter === "Basse" ? "btn-primary" : ""}`} onClick={() => setFilter("Basse")}>Basse({lowTaskCount})</button>
-            </div>
-            <button className="btn btn-primary"
-                    disabled={selectedTasks.size === 0}
-                    onClick={finishSelectedTasks}>Finir la sélection({selectedTasks.size})</button>
-          </div>
-        </div>
-        {filteredTasks.length > 0 ? (
-          <ul className="divide-y divide-primary/20">
-            {filteredTasks.map(task => (
-              <li key={task.id}>
-                <TaskItem task={task} 
-                          onDelete={() => deleteTask(task.id)}
-                          isSelected={selectedTasks.has(task.id)}
-                          onToggleSelect={toggleSelectedTask}/>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <div className="flex justify-center items-center flex-col p-5">
-            <div>
-              <Construction strokeWidth={1} className="w-40 h-40 text-primary"/>
-            </div>
-            <p className="text-sm">Aucune tâche pour ce filtre</p>
-          </div>
-        )}
+    <>
+      <div className="flex justify-center my-4">
+        <span className="text-6xl font-bold">Gestionnaire de tâches</span>
       </div>
-    </div>
+      <div className="flex justify-center">
+        <div className="w-2/3 flex flex-col gap-4 my-15 bg-base-300 p-5 rounded-2xl">
+          <div className="flex gap-4">
+            <input type="text" className="input w-full" placeholder="Ajouter une tâche" value={inputTask} onChange={(e) => setInputTask(e.target.value)} />
+            <select className="select w-full" value={selectPriority} onChange={(e) => setSelectPriority(e.target.value as Priority)}>
+              <option value="Urgente">Urgente</option>
+              <option value="Moyenne">Moyenne</option>
+              <option value="Basse">Basse</option>
+            </select>
+            <button className="btn btn-primary" onClick={addTask}>Ajouter</button>
+          </div>
+          <div className="space-y-2 flex-1 h-fit">
+            <div className="flex items-center justify-between">
+              <div className="flex flex-wrap gap-4">
+                <button className={`btn btn-soft ${filter === "Tous" ? "btn-primary" : ""}`} onClick={() => setFilter("Tous")}>Tous({tasksCount})</button>
+                <button className={`btn btn-soft ${filter === "Urgente" ? "btn-primary" : ""}`} onClick={() => setFilter("Urgente")}>Urgente({urgentTaskCount})</button>
+                <button className={`btn btn-soft ${filter === "Moyenne" ? "btn-primary" : ""}`} onClick={() => setFilter("Moyenne")}>Moyenne({mediumTaskCount})</button>
+                <button className={`btn btn-soft ${filter === "Basse" ? "btn-primary" : ""}`} onClick={() => setFilter("Basse")}>Basse({lowTaskCount})</button>
+              </div>
+              <button className="btn btn-primary"
+                      disabled={selectedTasks.size === 0}
+                      onClick={finishSelectedTasks}>Finir la sélection({selectedTasks.size})</button>
+            </div>
+          </div>
+          {filteredTasks.length > 0 ? (
+            <ul className="divide-y divide-primary/20">
+              {filteredTasks.map(task => (
+                <li key={task.id}>
+                  <TaskItem task={task} 
+                            onDelete={() => deleteTask(task.id)}
+                            isSelected={selectedTasks.has(task.id)}
+                            onToggleSelect={toggleSelectedTask}/>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="flex justify-center items-center flex-col p-5">
+              <div>
+                <Construction strokeWidth={1} className="w-40 h-40 text-primary"/>
+              </div>
+              <p className="text-sm">Aucune tâche pour ce filtre</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </>
   )
 }
 
